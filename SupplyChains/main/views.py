@@ -17,7 +17,6 @@ def manage_view(request):
     if not request.user.get_username() == admin:
         return HttpResponseRedirect('/')
     if request.method == 'POST':
-        return Http404
 
 def login(request):
     if request.user.is_authenticated():
