@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Manage Panel</title>
+{% endblock %}
+{% block body %}
+    <h1>Please upload a data file:</h1>
+    <form enctype="multipart/form-data" method="POST" action="">{% csrf_token %}
+        <input type="file" name="file" />
+        <input type="submit" value="Upload" />
+    </form>
+{% endblock %}
