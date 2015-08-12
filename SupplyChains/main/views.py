@@ -16,20 +16,18 @@ from main.controller import *
 admin = 'administrator'
 
 
-
-
+def logout(request):
+    if request.user.is_authenticated():
+        auth.logout(request)
+    return HttpResponseRedirect('/accounts/login/')
 
 def getAttribute(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login/')
-    file = open(os.path.join(BASE_DIR, 'tmp/s.xlsx'))
-    data = file.read()
-    file.close()
-    filename = 'system_attributes.xlsx'
-    response = HttpResponse(data, mimetype='application/octet-stream')
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    file = open(os.path.join(BASE_DIR, 'tmp/t.xlsx'), 'rb').read()
+    response = HttpResponse(file)
+    response['Content-Disposition'] = "attachment; filename=%s" % 'attribute.xlsx'
     return response
-
 
 def simulate(request):
     if not request.user.is_authenticated():
@@ -40,9 +38,10 @@ def simulate(request):
             return HttpResponseRedirect('/simulate/?now=1')
         now = int(request.GET['now'])
         render_list = {
-            'now': str(now + 1)
+            'now': str(now),
+            'last': str(now - 1)
         }
-        if not now + 1 <= getN():
+        if not now <= getN():
             render_list['form_disp'] = False
         else:
             render_list['form_disp'] = True
@@ -56,8 +55,8 @@ def simulate(request):
             render_list['Profit'] = getProfit(username, now - 1)
         else:
             render_list['info_disp'] = False
-            ClearPeriod(username)
-        render_to_response('simulate.html', render_list, context_instance=RequestContext(request))
+            ClearUserData(username)
+        return render_to_response('simulate.html', render_list, context_instance=RequestContext(request))
     else:
         period = int(request.POST['now'])
         models.Para(Username=username, Param='Prod', Period=period, Value=float(request.POST['Prod'])).save()
@@ -81,6 +80,36 @@ def simulate(request):
                                                                                                                period - 1) - getSalesUS(
                 username, period - 1)
         )
+        Set(
+            username,
+            'EUInv',
+            period,
+            getEUInv(username, period - 1) + getTPDCEU(username, period - 1) + getTPUSEU(username,
+                                                                                         period - 1) - getEUUS(username,
+                                                                                                               period - 1) - getSalesEU(
+                username, period - 1)
+        )
+        Set(
+            username,
+            'SalesUS',
+            period,
+            min(getDemandUS(period), getUSInv(username, period) - getUSEU(username, period))
+        )
+        Set(
+            username,
+            'SalesEU',
+            period,
+            min(getDemandEU(period), getEUInv(username, period) - getEUUS(username, period))
+        )
+        Set(
+            username,
+            'Profit',
+            period,
+            (1 + getRate()) * getProfit(username, period - 1) + getPriceUS() * getSalesUS(username, period) + getRateEU(
+                period) * getPriceEU() * getSalesEU(username, period) - getRateCNY(period) * getCostProd(1) * getProd(
+                username, period) - getCostTranship() * (getUSEU(username, period) + getEUUS(username, period))
+        )
+        return HttpResponseRedirect('/simulate/?now=' + str(period + 1))
 
 
 def success(request):
@@ -94,6 +123,7 @@ def manage_view(request):
     if not request.user.get_username() == admin:
         return HttpResponseRedirect('/')
     if request.method == 'POST':
+        models.Attr.objects.all().delete()
         file = request.FILES.get('file')
         file_name = os.path.join(BASE_DIR, 'tmp/t.xlsx')
         keys = open(file_name, 'wb')
@@ -109,11 +139,11 @@ def manage_view(request):
         Trans = float(wb['System']['F3'].value)
         Rate = float(wb['System']['G3'].value)
         models.Attr(Attri='N', Period=0, Value=N).save()
-        models.Attr(Attri='ProdCost1', Period=0, Value=ProdCost1).save()
-        models.Attr(Attri='ProdCost2', Period=0, Value=ProdCost2).save()
+        models.Attr(Attri='CostProd1', Period=0, Value=ProdCost1).save()
+        models.Attr(Attri='CostProd2', Period=0, Value=ProdCost2).save()
         models.Attr(Attri='PriceUS', Period=0, Value=PriceUS).save()
         models.Attr(Attri='PriceEU', Period=0, Value=PriceEU).save()
-        models.Attr(Attri='Trans', Period=0, Value=Trans).save()
+        models.Attr(Attri='CostTranship', Period=0, Value=Trans).save()
         models.Attr(Attri='Rate', Period=0, Value=Rate).save()
         for i in range(0, 15):
             models.Attr(Attri='DemandUS', Period=int(i+1), Value=float(wb['Demand']['B'+str(3+i)].value)).save()

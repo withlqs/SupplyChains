@@ -22,9 +22,10 @@ urlpatterns = [
     #url(r'^admin/', include(admin.site.urls)),
     url(r'^manage/', views.manage_view),
     url(r'^accounts/login/', views.login),
+    url(r'^accounts/logout/', views.logout),
     url(r'^accounts/register/', views.register),
     url(r'^success/', views.success),
     url(r'^simulate/', views.simulate),
-    url(r'^getAttribute/', views.getAttribute),
+    url(r'^attribute.xlsx', views.getAttribute),
 
 ]

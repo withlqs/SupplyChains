@@ -4,28 +4,29 @@
 {% endblock %}
 {% block body %}
     <h1>Simulate</h1>
-    Click <a href="/getAttribute/">here</a> to review system's attributes.
+    Click <a href="/attribute.xlsx">here</a> to review system's attributes.<br/><br/>
     {% if info_disp %}
-        Period{{ now }}'s infomation:<br/>
+        {{ last }}th period's infomation:<br/>
         DCInv: {{ DCInv }}<br/>
         USInv: {{ USInv }}<br/>
         EUInv: {{ EUInv }}<br/>
         SalesUS: {{ SalesUS }}<br/>
         SalesEU: {{ SalesEU }}<br/>
         Profit: {{ Profit }}<br/>
-    {% endif %}
+    {% endif %}<br/>
     {% if form_disp %}
+        Input {{ now }}th period's information:<br/>
         <form action="/simulate/?now={{ now }}" method="post">{% csrf_token %}
             <label for="Prod">Production amount:</label>
             <input type="text" name="Prod" value="" id="Prod"/><br/>
             <label for="DCUS">Allocation amount DC to US:</label>
-            <input type="text" name="DCUS" value="" id="DCUS"/>
+            <input type="text" name="DCUS" value="" id="DCUS"/><br/>
             <label for="DCEU">Allocation amount DC to EU:</label>
-            <input type="text" name="DCEU" value="" id="DCEU"/>
+            <input type="text" name="DCEU" value="" id="DCEU"/><br/>
             <label for="USEU">Transship amount US to EU:</label>
-            <input type="text" name="USEU" value="" id="USEU"/>
+            <input type="text" name="USEU" value="" id="USEU"/><br/>
             <label for="EUUS">Transship amount EU to US:</label>
-            <input type="text" name="EUUS" value="" id="EUUS"/>
+            <input type="text" name="EUUS" value="" id="EUUS"/><br/>
             <input type="hidden" name="now" value="{{ now }}"/>
             <input type="submit" value="Simulate"/>
         </form>
