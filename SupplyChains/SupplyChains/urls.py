@@ -23,5 +23,8 @@ urlpatterns = [
     url(r'^manage/', views.manage_view),
     url(r'^accounts/login/', views.login),
     url(r'^accounts/register/', views.register),
+    url(r'^success/', views.success),
+    url(r'^simulate/', views.simulate),
+    url(r'^getAttribute/', views.getAttribute),
 
 ]
