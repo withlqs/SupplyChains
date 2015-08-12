@@ -9,44 +9,14 @@ from SupplyChains.settings import BASE_DIR
 import os
 from openpyxl.reader.excel import load_workbook
 from main import models
+from main.controller import *
 
 # Create your views here.
 
 admin = 'administrator'
 
 
-def getN():
-    return int(models.Attr.objects.get(Attri='N').Value)
 
-
-def getDCInv(username, period):
-    if period == 0:
-        return 0
-    return float(models.Para.objects.get(Username=username, Para='DCInv', Period=period).Value)
-
-
-def getUSInv(username, period):
-    return float(models.Para.objects.get(Username=username, Para='USInv', Period=period).Value)
-
-
-def getEUInv(username, period):
-    return float(models.Para.objects.get(Username=username, Para='EUInv', Period=period).Value)
-
-
-def getSalesUS(username, period):
-    return float(models.Para.objects.get(Username=username, Para='SalesUS', Period=period).Value)
-
-
-def getSalesEU(username, period):
-    return float(models.Para.objects.get(Username=username, Para='SalesEU', Period=period).Value)
-
-
-def getProfit(username, period):
-    return float(models.Para.objects.get(Username=username, Para='Profit', Period=period).Value)
-
-
-def ClearPeriod(username):
-    models.Para.objects.filter(Username=username).delete()
 
 
 def getAttribute(request):
@@ -95,6 +65,22 @@ def simulate(request):
         models.Para(Username=username, Param='DCEU', Period=period, Value=float(request.POST['DCEU'])).save()
         models.Para(Username=username, Param='USEU', Period=period, Value=float(request.POST['USEU'])).save()
         models.Para(Username=username, Param='EUUS', Period=period, Value=float(request.POST['EUUS'])).save()
+        Set(
+            username,
+            'DCInv',
+            period,
+            getDCInv(username, period - 1) + getProd(username, period - 1) - getDCUS(username, period - 1) - getDCEU(
+                username, period - 1)
+        )
+        Set(
+            username,
+            'USInv',
+            period,
+            getUSInv(username, period - 1) + getTPDCUS(username, period - 1) + getTPEUUS(username,
+                                                                                         period - 1) - getUSEU(username,
+                                                                                                               period - 1) - getSalesUS(
+                username, period - 1)
+        )
 
 
 def success(request):
