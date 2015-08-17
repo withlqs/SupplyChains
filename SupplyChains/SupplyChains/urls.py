@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^accounts/login/', views.login),
     url(r'^accounts/logout/', views.logout),
     url(r'^accounts/register/', views.register),
+    url(r'^accounts/profile/', views.profile),
     url(r'^success/', views.success),
     url(r'^simulate/', views.simulate),
     url(r'^attribute.xlsx', views.getAttribute),

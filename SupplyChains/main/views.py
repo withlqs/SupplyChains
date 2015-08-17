@@ -111,7 +111,6 @@ def simulate(request):
         )
         return HttpResponseRedirect('/simulate/?now=' + str(period + 1))
 
-
 def success(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login/')
@@ -160,6 +159,14 @@ def login(request):
             return HttpResponseRedirect('/manage/')
         return HttpResponseRedirect('/simulate/')
     return views.login(request)
+
+
+def profile(request):
+    if request.user.is_authenticated():
+        if request.user.get_username() == admin:
+            return HttpResponseRedirect('/manage/')
+        return HttpResponseRedirect('/simulate/')
+    return HttpResponseRedirect('/accounts/login/')
 
 def register(request):
     if request.user.is_authenticated():
