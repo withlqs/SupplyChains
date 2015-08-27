@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import render_to_response
 from django.shortcuts import RequestContext
 from django.contrib.auth import forms
@@ -5,11 +7,11 @@ from django.contrib.auth import views
 from django.contrib.auth import authenticate
 from django.contrib import auth
 from django.http import *
-from SupplyChains.settings import BASE_DIR
-import os
 from openpyxl.reader.excel import load_workbook
-from main import models
+
+from SupplyChains.settings import BASE_DIR
 from main.controller import *
+
 
 # Create your views here.
 
@@ -21,7 +23,7 @@ def log(request):
         return HttpResponseRedirect('/accounts/login/')
     username = request.user.get_username()
     if not username == admin:
-        return Http404
+        raise Http404
     models.Para.objects.raw(
         "SELECT Username,Param,Period,Value INTO OUTFILE '/tmp/log.csv' FROM SupplyChains.main_para;")
     file = open('/tmp/log.csv', 'rb').read()
@@ -207,10 +209,11 @@ def simulate(request):
             username,
             'EUInv',
             period,
-            getEUInv(username, period - 1) + getTPDCEU(username, period - 1) + getTPUSEU(username,
-                                                                                         period - 1) - getEUUS(username,
-                                                                                                               period - 1) - getSalesEU(
-                username, period - 1)
+            getEUInv(username, period - 1)
+            + getTPDCEU(username, period - 1)
+            + getTPUSEU(username, period - 1)
+            - getEUUS(username, period - 1)
+            - getSalesEU(username, period - 1)
         )
         Set(
             username,
@@ -300,7 +303,7 @@ def register(request):
     if request.method == 'POST':
         form = forms.UserCreationForm(request.POST)
         if form.is_valid():
-            new_user = form.save()
+            form.save()
             auth.login(request, user=authenticate(username=form.cleaned_data['username'],
                                                   password=form.cleaned_data['password1']))
             return HttpResponseRedirect('/manage/')

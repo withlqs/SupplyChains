@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dc2c7524-7a41-4053-9263-54dccda18c2c" name="Default" comment="change redirect root">
+    <list default="true" id="dc2c7524-7a41-4053-9263-54dccda18c2c" name="Default" comment="fix error on upload file">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/views.py" afterPath="$PROJECT_DIR$/main/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -28,11 +28,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="choose.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/main/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.72756755">
+              <caret line="304" column="12" selection-start-line="304" selection-start-column="12" selection-end-line="304" selection-end-column="12" />
+              <folding>
+                <element signature="e#0#47#0" expanded="true" />
+                <marker date="1440698159411" expanded="true" signature="731:821" placeholder="SELECT Usern..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="choose.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main/templates/choose.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3585746">
-              <caret line="21" column="31" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
+            <state vertical-scroll-proportion="-11.259259">
+              <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -554,7 +567,13 @@
       <option name="project" value="LOCAL" />
       <updated>1440689349175</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="fix error on upload file">
+      <created>1440689597967</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1440689597967</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -599,7 +618,8 @@
     <MESSAGE value="add front html" />
     <MESSAGE value="fix redirect error" />
     <MESSAGE value="change redirect root" />
-    <option name="LAST_COMMIT_MESSAGE" value="change redirect root" />
+    <MESSAGE value="fix error on upload file" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix error on upload file" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -615,7 +635,7 @@
           <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
-            <marker date="1440689547866" expanded="true" signature="732:822" placeholder="SELECT Usern..." />
+            <marker date="1440698159411" expanded="true" signature="731:821" placeholder="SELECT Usern..." />
           </folding>
         </state>
       </provider>
@@ -755,22 +775,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/views.py">
+    <entry file="file://$PROJECT_DIR$/main/templates/choose.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="264" column="41" selection-start-line="264" selection-start-column="41" selection-end-line="264" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#47#0" expanded="true" />
-            <marker date="1440689547866" expanded="true" signature="732:822" placeholder="SELECT Usern..." />
-          </folding>
+        <state vertical-scroll-proportion="-11.259259">
+          <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/templates/choose.html">
+    <entry file="file://$PROJECT_DIR$/main/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3585746">
-          <caret line="21" column="31" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
-          <folding />
+        <state vertical-scroll-proportion="0.72756755">
+          <caret line="304" column="12" selection-start-line="304" selection-start-column="12" selection-end-line="304" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+            <marker date="1440698159411" expanded="true" signature="731:821" placeholder="SELECT Usern..." />
+          </folding>
         </state>
       </provider>
     </entry>
