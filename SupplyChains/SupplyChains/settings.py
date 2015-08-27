@@ -82,8 +82,8 @@ DATABASES = {
         'NAME': 'SupplyChains',
         'USER': 'django',
         'PASSWORD': 'Limiteddjango',
-        'HOST': '/var/run/mysqld/mysqld.sock',
-        'PORT': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 

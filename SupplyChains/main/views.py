@@ -283,15 +283,13 @@ def login(request):
     if request.user.is_authenticated():
         if request.user.get_username() == admin:
             return HttpResponseRedirect('/manage/')
-        return HttpResponseRedirect('/simulate/')
+        return HttpResponseRedirect('/')
     return views.login(request)
 
 
 def profile(request):
     if request.user.is_authenticated():
-        if request.user.get_username() == admin:
-            return HttpResponseRedirect('/manage/')
-        return HttpResponseRedirect('/simulate/')
+        return HttpResponseRedirect('/')
     return HttpResponseRedirect('/accounts/login/')
 
 
