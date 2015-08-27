@@ -1,11 +1,54 @@
-{% extends "base.html" %}
-{% block head %}
-<title>Register</title>
-{% endblock %}
-{% block body %}
-    <h1>Add a new account</h1>
-    <form action="" method="post">{% csrf_token %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Register Account</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/register.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/static/js/html5shiv.js"></script>
+    <script src="/static/js/respond.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<div class="container">
+    <h2 class="form-register-heading">Register Your Account</h2>
+
+    <form class="form-horizontal" action="" method="post">{% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="register">
+        <!--<div class="form-group">-->
+        <!--<label for="id_username" class="col-sm-3 control-label">User&nbsp;Name:</label>-->
+        <!--<div class="col-sm-7">-->
+        <!--<input type="text" class="form-control" id="id_username" name="id_username" placeholder="User name" required autofocus>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+        <!--<label for="id_password1" class="col-sm-3 control-label">Password:</label>-->
+        <!--<div class="col-sm-7">-->
+        <!--<input type="password" class="form-control" id="id_password1" name="id_password1" placeholder="Password" required>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+        <!--<label for="id_password2" class="col-sm-3 control-label">Confirm:</label>-->
+        <!--<div class="col-sm-7">-->
+        <!--<input type="password" class="form-control" id="id_password2" name="id_password2" placeholder="Confirm Password" required>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <input class="btn btn-lg btn-primary" type="submit" value="Register">
+            </div>
+        </div>
+
     </form>
-{% endblock %}
+</div>
+
+</body>
+</html>

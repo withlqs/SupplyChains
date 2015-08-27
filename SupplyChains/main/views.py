@@ -16,10 +16,36 @@ from main.controller import *
 admin = 'administrator'
 
 
+def log(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/accounts/login/')
+    username = request.user.get_username()
+    if not username == admin:
+        return Http404
+    models.Para.objects.raw(
+        "SELECT Username,Param,Period,Value INTO OUTFILE '/tmp/log.csv' FROM SupplyChains.main_para;")
+    file = open('/tmp/log.csv', 'rb').read()
+    response = HttpResponse(file)
+    response['Content-Disposition'] = "attachment; filename=%s" % 'log.csv'
+    return response
+
+
+def choose(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/accounts/login/')
+    username = request.user.get_username()
+    render_list = {}
+    if username == admin:
+        render_list['admin'] = True
+    else:
+        render_list['admin'] = False
+    return render_to_response('choose.html', render_list)
+
 def logout(request):
     if request.user.is_authenticated():
         auth.logout(request)
     return HttpResponseRedirect('/accounts/login/')
+
 
 def getAttribute(request):
     if not request.user.is_authenticated():
@@ -28,6 +54,7 @@ def getAttribute(request):
     response = HttpResponse(file)
     response['Content-Disposition'] = "attachment; filename=%s" % 'attribute.xlsx'
     return response
+
 
 def simulate2(request):
     if not request.user.is_authenticated():
@@ -47,37 +74,45 @@ def simulate2(request):
             render_list['form_disp'] = True
         if now != 1:
             render_list['info_disp'] = True
-            render_list['transUSEU'] = getUSEU(username, now-1)
-            render_list['transEUUS'] = getEUUS(username, now-1)
-            render_list['DCInv'] = getDCInv2(username, now - 1)
+            render_list['TPDCUS'] = getTPDCUS2(username, now - 1)
+            render_list['DCUSInv'] = getDCUSInv2(username, now - 1)
+            render_list['SalesUS'] = getSalesUS2(username, now - 1)
             render_list['USInv'] = getUSInv2(username, now - 1)
+            render_list['DCEUInv'] = getDCEUInv2(username, now - 1)
+            render_list['TPDCEU'] = getTPDCEU2(username, now - 1)
+            render_list['SalesEU'] = getSalesEU2(username, now - 1)
             render_list['EUInv'] = getEUInv2(username, now - 1)
-            render_list['SalesUS'] = getSalesUS(username, now - 1)
-            render_list['SalesEU'] = getSalesEU(username, now - 1)
-            render_list['Profit'] = getProfit(username, now - 1)
+            render_list['Profit'] = getProfit2(username, now - 1)
+            lst = []
+            for period in range(1, now):
+                lst.append({
+                    'id': period,
+                    'profit': getProfit2(username, period)
+                })
+            render_list['ProfitData'] = lst
         else:
             render_list['info_disp'] = False
-            ClearUserData(username)
-        return render_to_response('simulate.html', render_list, context_instance=RequestContext(request))
+        return render_to_response('simulate2.html', render_list, context_instance=RequestContext(request))
     else:
         period = int(request.POST['now'])
+        ClearData2(username, period)
         models.Para(Username=username, Param='EUProd', Period=period, Value=float(request.POST['ProdEU'])).save()
         models.Para(Username=username, Param='USProd', Period=period, Value=float(request.POST['ProdUS'])).save()
         Set(
             username,
             'USInv2',
             period,
-            getUSInv(username, period-1)
-            +getTPDCUS2(username, period-1)
-            -getSalesUS2(username, period-1)
+            getUSInv2(username, period - 1)
+            + getTPDCUS2(username, period - 1)
+            - getSalesUS2(username, period - 1)
         )
         Set(
             username,
             'EUInv2',
             period,
-            getEUInv(username, period-1)
-            +getTPDCEU2(username, period-1)
-            -getSalesEU2(username, period-1)
+            getEUInv2(username, period - 1)
+            + getTPDCEU2(username, period - 1)
+            - getSalesEU2(username, period - 1)
         )
         Set(
             username,
@@ -95,12 +130,13 @@ def simulate2(request):
             username,
             'Profit2',
             period,
-            (1+getRate())*getProfit2(username, period-1)
-            +getPriceUS()*getSalesUS2(username, period)
-            +getRateEU(period)*getPriceEU()*getSalesEU2(username, period)
-            -getRateCNY(period)*getCostProd(2)*(getUSProd(username, period)+getEUProd(username, period))
+            (1 + getRate()) * getProfit2(username, period - 1)
+            + getPriceUS() * getSalesUS2(username, period)
+            + getRateEU(period) * getPriceEU() * getSalesEU2(username, period)
+            - getRateCNY(period) * getCostProd(2) * (getUSProd(username, period) + getEUProd(username, period))
         )
         return HttpResponseRedirect('/simulate2/?now=' + str(period + 1))
+
 
 def simulate(request):
     if not request.user.is_authenticated():
@@ -120,20 +156,29 @@ def simulate(request):
             render_list['form_disp'] = True
         if now != 1:
             render_list['info_disp'] = True
-            render_list['transUSEU'] = getUSEU(username, now-1)
-            render_list['transEUUS'] = getEUUS(username, now-1)
+            render_list['transUSEU'] = getUSEU(username, now - 1)
+            render_list['transEUUS'] = getEUUS(username, now - 1)
+            render_list['transDCUS'] = getDCUS(username, now - 1)
+            render_list['transDCEU'] = getDCEU(username, now - 1)
             render_list['DCInv'] = getDCInv(username, now - 1)
             render_list['USInv'] = getUSInv(username, now - 1)
             render_list['EUInv'] = getEUInv(username, now - 1)
             render_list['SalesUS'] = getSalesUS(username, now - 1)
             render_list['SalesEU'] = getSalesEU(username, now - 1)
             render_list['Profit'] = getProfit(username, now - 1)
+            lst = []
+            for period in range(1, now):
+                lst.append({
+                    'id': period,
+                    'profit': getProfit(username, period)
+                })
+            render_list['ProfitData'] = lst
         else:
             render_list['info_disp'] = False
-            ClearUserData(username)
         return render_to_response('simulate.html', render_list, context_instance=RequestContext(request))
     else:
         period = int(request.POST['now'])
+        ClearData1(username, period)
         models.Para(Username=username, Param='Prod', Period=period, Value=float(request.POST['Prod'])).save()
         models.Para(Username=username, Param='DCUS', Period=period, Value=float(request.POST['DCUS'])).save()
         models.Para(Username=username, Param='DCEU', Period=period, Value=float(request.POST['DCEU'])).save()
@@ -144,19 +189,19 @@ def simulate(request):
             'DCInv',
             period,
             getDCInv(username, period - 1)
-            +getProd(username, period - 1)
-            -getDCUS(username, period - 1)
-            -getDCEU(username, period - 1)
+            + getProd(username, period - 1)
+            - getDCUS(username, period - 1)
+            - getDCEU(username, period - 1)
         )
         Set(
             username,
             'USInv',
             period,
             getUSInv(username, period - 1)
-            +getTPDCUS(username, period - 1)
-            +getTPEUUS(username, period - 1)
-            -getUSEU(username, period - 1)
-            -getSalesUS(username, period - 1)
+            + getTPDCUS(username, period - 1)
+            + getTPEUUS(username, period - 1)
+            - getUSEU(username, period - 1)
+            - getSalesUS(username, period - 1)
         )
         Set(
             username,
@@ -189,10 +234,12 @@ def simulate(request):
         )
         return HttpResponseRedirect('/simulate/?now=' + str(period + 1))
 
+
 def success(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login/')
     return render_to_response('success.html', context_instance=RequestContext(request))
+
 
 def manage_view(request):
     if not request.user.is_authenticated():
@@ -223,13 +270,14 @@ def manage_view(request):
         models.Attr(Attri='CostTranship', Period=0, Value=Trans).save()
         models.Attr(Attri='Rate', Period=0, Value=Rate).save()
         for i in range(0, 15):
-            models.Attr(Attri='DemandUS', Period=int(i+1), Value=float(wb['Demand']['B'+str(3+i)].value)).save()
-            models.Attr(Attri='DemandEU', Period=int(i+1), Value=float(wb['Demand']['C'+str(3+i)].value)).save()
-            models.Attr(Attri='RateCNY', Period=int(i+1), Value=float(wb['Rate']['B'+str(3+i)].value)).save()
-            models.Attr(Attri='RateEU', Period=int(i+1), Value=float(wb['Rate']['C'+str(3+i)].value)).save()
+            models.Attr(Attri='DemandUS', Period=int(i + 1), Value=float(wb['Demand']['B' + str(3 + i)].value)).save()
+            models.Attr(Attri='DemandEU', Period=int(i + 1), Value=float(wb['Demand']['C' + str(3 + i)].value)).save()
+            models.Attr(Attri='RateCNY', Period=int(i + 1), Value=float(wb['Rate']['B' + str(3 + i)].value)).save()
+            models.Attr(Attri='RateEU', Period=int(i + 1), Value=float(wb['Rate']['C' + str(3 + i)].value)).save()
         return HttpResponseRedirect('/success/')
     else:
         return render_to_response('manage.html', context_instance=RequestContext(request))
+
 
 def login(request):
     if request.user.is_authenticated():
@@ -246,6 +294,7 @@ def profile(request):
         return HttpResponseRedirect('/simulate/')
     return HttpResponseRedirect('/accounts/login/')
 
+
 def register(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/')
@@ -253,7 +302,8 @@ def register(request):
         form = forms.UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            auth.login(request, user = authenticate(username = form.cleaned_data['username'], password = form.cleaned_data['password1']))
+            auth.login(request, user=authenticate(username=form.cleaned_data['username'],
+                                                  password=form.cleaned_data['password1']))
             return HttpResponseRedirect('/manage/')
     else:
         form = forms.UserCreationForm()

@@ -1,5 +1,29 @@
 from main import models
 
+
+def ClearData1(username, period):
+    models.Para.objects.filter(Username=username, Period=period, Param='Prod').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='DCUS').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='DCEU').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='USEU').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='EUUS').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='DCInv').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='USInv').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='EUInv').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='SalesUS').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='SalesEU').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='Profit').delete()
+
+
+def ClearData2(username, period):
+    models.Para.objects.filter(Username=username, Period=period, Param='EUProd').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='USProd').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='USInv2').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='EUInv2').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='SalesUS2').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='SalesEU2').delete()
+    models.Para.objects.filter(Username=username, Period=period, Param='Profit2').delete()
+
 def getProfit2(username, period):
     if period == 0:
         return 0

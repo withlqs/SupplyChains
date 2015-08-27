@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Please Choose one Chain</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/static/css/choose.css" rel="stylesheet">
+    <link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/static/js/html5shiv.js"></script>
+    <script src="/static/js/respond.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!--Click one Button to Choose one Chain-->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-8">
+            <div class="col-sm-6">
+                <a href="/accounts/logout/" class="btn btn-info" role="button">Log Out</a>
+            </div>
+        </div>
+    </div>
+    <div class="chooseHead">
+        <h1>Please Choose One Chain to Simulate:</h1>
+
+        <div class="row chooseButtons">
+            <a href="/simulate/" target="_blank" class="btn btn-primary btn-cus" role="button">Chain 1</a>
+        </div>
+        <div class="row chooseButtons">
+            <a href="/simulate2/" target="_blank" class="btn btn-primary btn-cus" role="button">Chain 2</a>
+        </div>
+        {% if admin %}
+            <div class="row chooseButtons">
+                <a href="/manage/" target="_blank" class="btn btn-primary btn-cus" role="button">Manage</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!--jQuery and Bootstrap-->
+<script src="/static/js/jquery-1.11.3.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>

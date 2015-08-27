@@ -20,13 +20,16 @@ from django.contrib import auth
 
 urlpatterns = [
     #url(r'^admin/', include(admin.site.urls)),
-    url(r'^manage/', views.manage_view),
-    url(r'^accounts/login/', views.login),
-    url(r'^accounts/logout/', views.logout),
-    url(r'^accounts/register/', views.register),
-    url(r'^accounts/profile/', views.profile),
-    url(r'^success/', views.success),
-    url(r'^simulate/', views.simulate),
+    url(r'^manage', views.manage_view),
+    url(r'^accounts/login', views.login),
+    url(r'^accounts/logout', views.logout),
+    url(r'^accounts/register', views.register),
+    url(r'^accounts/profile', views.profile),
+    url(r'^success', views.success),
+    url(r'^simulate', views.simulate),
+    url(r'^simulate2', views.simulate2),
     url(r'^attribute.xlsx', views.getAttribute),
+    url(r'^log.csv', views.log),
+    url(r'^', views.choose),
 
 ]
