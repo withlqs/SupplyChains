@@ -262,6 +262,7 @@ def manage_view(request):
         PriceEU = float(wb['System']['E3'].value)
         Trans = float(wb['System']['F3'].value)
         Rate = float(wb['System']['G3'].value)
+        models.Attr.objects.all().delete()
         models.Attr(Attri='N', Period=0, Value=N).save()
         models.Attr(Attri='CostProd1', Period=0, Value=ProdCost1).save()
         models.Attr(Attri='CostProd2', Period=0, Value=ProdCost2).save()
