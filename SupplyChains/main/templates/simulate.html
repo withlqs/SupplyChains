@@ -1,34 +1,280 @@
-{% extends "base.html" %}
-{% block head %}
-    <title>Simulate</title>
-{% endblock %}
-{% block body %}
-    <h1>Simulate</h1>
-    Click <a href="/attribute.xlsx">here</a> to review system's attributes.<br/><br/>
-    {% if info_disp %}
-        {{ last }}th period's infomation:<br/>
-        DCInv: {{ DCInv }}<br/>
-        USInv: {{ USInv }}<br/>
-        EUInv: {{ EUInv }}<br/>
-        SalesUS: {{ SalesUS }}<br/>
-        SalesEU: {{ SalesEU }}<br/>
-        Profit: {{ Profit }}<br/>
-    {% endif %}<br/>
-    {% if form_disp %}
-        Input {{ now }}th period's information:<br/>
-        <form action="/simulate/?now={{ now }}" method="post">{% csrf_token %}
-            <label for="Prod">Production amount:</label>
-            <input type="text" name="Prod" value="" id="Prod"/><br/>
-            <label for="DCUS">Allocation amount DC to US:</label>
-            <input type="text" name="DCUS" value="" id="DCUS"/><br/>
-            <label for="DCEU">Allocation amount DC to EU:</label>
-            <input type="text" name="DCEU" value="" id="DCEU"/><br/>
-            <label for="USEU">Transship amount US to EU:</label>
-            <input type="text" name="USEU" value="" id="USEU"/><br/>
-            <label for="EUUS">Transship amount EU to US:</label>
-            <input type="text" name="EUUS" value="" id="EUUS"/><br/>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simulation_Supply-Chain-1</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/simulation1.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/static/js/html5shiv.js"></script>
+    <script src="/static/js/respond.js"></script>
+    <![endif]-->
+    <script>
+        function display(){
+            var el=document.getElementById("time");
+            var time=new Date();
+            el.innerHTML=time.toLocaleDateString()+" "+time.toLocaleTimeString();
+            setTimeout(displayTime,1000);
+
+            var dis_tpDCUS=document.getElementById("dis_transDC2US");
+            var dis_tpDCEU=document.getElementById("dis_transDC2EU");
+            var dis_tpUSEU=document.getElementById("dis_transUS2EU");
+            var dis_tpEUUS=document.getElementById("dis_transEU2US");
+            var input_transDC2US=document.getElementById("DCUS");
+            var input_transDC2EU=document.getElementById("DCEU");
+            var input_transUS2EU=document.getElementById("USEU");
+            var input_transEU2US=document.getElementById("EUUS");
+            dis_tpDCUS.innerHTML=eval(input_transDC2US).value;
+            dis_tpDCEU.innerHTML=eval(input_transDC2EU).value;
+            dis_tpUSEU.innerHTML=eval(input_transUS2EU).value;
+            dis_tpEUUS.innerHTML=eval(input_transEU2US).value;
+        }
+        window.onload=display;
+    </script>
+
+
+</head>
+<body>
+<span id="time"></span>
+<!--Simulation Page-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 text-center">
+            <h2>Chain 1 Manage Simulation</h2>
+            <div class="well well-lg text-info head-desc">Supply Chain 1: the product is produced in the plant, then shipped to DC, then the inventory is split to US and EU, then each shipped to transport, and then each arrive to US and EU warehouses. Inventory at US/EU warehouses can also be transshipped to EU/US.</div>
+        </div>
+        <div class="col-sm-4 text-center" style="margin-top: 130px">
+            Click <a href="/attribute.xlsx">here</a> to review system's attributes.
+        </div>
+    </div>
+</div>
+
+<!--Create the Main Page-->
+
+<div class="row">
+
+    <div class="col-sm-2 col-sm-offset-5">
+        <img src="/static/img/ship.jpg" class="img-responsive center-block">
+        <div class="panel panel-primary trans-cus">
+            <div class="panel-heading"><h3 class="panel-title">Transport</h3></div>
+            <div class="panel-body">
+                <label class="control-label dis_transDC2US" id="dis_transDC2US">{{ transDCUS }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-1" style="margin-top: 30px">
+        <img src="/static/img/arrow.jpg" class="img-responsive">
+    </div>'
+    <div class="col-sm-2">
+        <div class="text-center"><label>US</label></div>
+        <img src="/static/img/demand.jpg" class="img-responsive center-block">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Inventory</h3></div>
+            <div class="panel-body">
+                <form role="form" id="form_transUS2EU">
+                    <label class="control-label dis_label" id="dis_inventoryUS">{{ USInv }}</label>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Sale of US</h3>
+            </div>
+            <div class="panel-body">
+                <label class="dis_label" id="dis_saleUS">{{ SalesUS }}</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-1 col-sm-offset-8">
+        <img class="img-responsive" src="../img/arrow_135.jpg">
+    </div>
+    <div class="col-sm-1">
+        <img class="img-responsive" src="../img/arrow_-135.jpg">
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-2">
+        <div class="text-center"><label class="dis_name">Plant</label></div>
+        <img class="img-responsive" src="../img/factory.png">
+    </div>
+    <div class="col-sm-1">
+        <img class="img-responsive" style="margin-top: 120px" src="../img/arrow.jpg">
+    </div>
+    <div class="col-sm-2">
+        <div class="text-center"><label class="dis_name">DC</label></div>
+        <img class="img-responsive" style="margin-top: 30px" src="../img/Simulation-DC.jpg">
+    </div>
+    <div class="col-sm-1" style="margin-top: 50px">
+        <div class="panel panel-primary">
+            <div class="panel-heading panelhead-cus">Inventory</div>
+            <div class="panel-body panel-text">
+                <label class="dis_label" id="dis_inventoryDC">{{ DCInv }}</label>
+            </div>
+        </div>
+    </div>
+    <!--<div class="col-sm-1">-->
+        <!--<div class="panel panel-primary">-->
+            <!--<div class="panel-heading panelhead-cus text-center">US</div>-->
+            <!--<div class="panel-body">-->
+                <!--<form role="form">-->
+                    <!--<input class="form-control" id="input_transDC2US" required>-->
+                <!--</form>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="panel panel-primary">-->
+            <!--<div class="panel-heading panelhead-cus text-center">EU</div>-->
+            <!--<div class="panel-body">-->
+                <!--<form role="form">-->
+                    <!--<input class="form-control" id="input_transDC2EU" required>-->
+                <!--</form>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div class="col-sm-1">
+        <img class="img-responsive ship_cus" src="../img/ship.jpg">
+    </div>
+    <div class="col-sm-2">
+        <div class="panel panel-primary panel-cus">
+            <div class="panel-heading panelhead-cus text-center">Transport</div>
+            <div class="panel-body">
+                <label class="dis_label" id="dis_transUS2EU">{{ transUSEU }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-1">
+        <img class="img-responsive ship_cus" src="../img/ship.jpg">
+    </div>
+    <div class="col-sm-2">
+        <div class="panel panel-primary panel-cus">
+            <div class="panel-heading panelhead-cus text-center">Transport</div>
+            <div class="panel-body">
+                <label class="dis_label" id="dis_transEU2US">{{ transEUUS }}</label>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-sm-1 col-sm-offset-8">
+        <img class="img-responsive" src="../img/arrow_45.jpg">
+    </div>
+    <div class="col-sm-1">
+        <img class="img-responsive" src="../img/arrow_-45.jpg">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-2 col-sm-offset-5">
+        <img src="../img/ship.jpg" class="img-responsive center-block">
+        <div class="panel panel-primary trans-cus">
+            <div class="panel-heading"><h3 class="panel-title">Transport</h3></div>
+            <div class="panel-body">
+                <label class="control-label dis_transDC2US" id="dis_transDC2EU">{{ transDCEU }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-1" style="margin-top: 30px">
+        <img src="../img/arrow.jpg" class="img-responsive">
+    </div>'
+    <div class="col-sm-2">
+        <div class="text-center"><label>EU</label></div>
+        <img src="../img/demand.jpg" class="img-responsive center-block">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Tranship&nbsp;&nbsp;&nbsp;Inventory</h3></div>
+            <div class="panel-body">
+                <label class="control-label dis_label" id="dis_inventoryEU">{{ EUInv }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Sale of EU</h3>
+            </div>
+            <div class="panel-body">
+                <label class="dis_label" id="dis_saleEU">{{ SalesEU }}</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Create Input Form-->
+<div class="row">
+    <div class="col-sm-11 col-sm-offset-1">
+        <form class="form-horizontal" action="/simulate/?now={{ now }}" method="post">{% csrf_token %}
+            <div class="form-group">
+                <label for="Prod" class="col-sm-2 control-label">Input Production:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="Prod" name="Prod" placeholder="Prod" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="DCUS" class="col-sm-2 control-label">Input Allocation for US:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="DCUS" name="DCUS" placeholder="Allocation for US" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="DCEU" class="col-sm-2 control-label">Input Allocation for EU:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="DCEU" name="DCEU" placeholder="Allocation for EU" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="USEU" class="col-sm-2 control-label">Input US to EU:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="USEU" name="USEU" placeholder="Transport of US to EU" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="EUUS" class="col-sm-2 control-label">Input EU to US:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="EUUS" name="EUUS" placeholder="Transport of EU to US" required autofocus>
+                </div>
+            </div>
             <input type="hidden" name="now" value="{{ now }}"/>
-            <input type="submit" value="Simulate"/>
+            <div class="form-group">
+                <div class="col-sm-3 col-sm-offset-2">
+                    <input type="submit" class="btn btn-block btn-info btn-lg run-cus" value="RUN">
+                </div>
+            </div>
         </form>
-    {% endif %}
-{% endblock %}
+    </div>
+</div>
+
+<div class="row" style="margin-top: 50px">
+    <div class="col-sm-12">
+        <div class="well">
+            <div class="row">
+                <div class="col-sm-3">
+                    <h3 class="text-center text-success profit-head">Total Profit:</h3>
+                </div>
+                <div class="col-sm-7">
+                    <label class="control-label text-right profit-text center-block" id="totalprofit_chain1">{{ Profit }}</label>
+                </div>
+                <div class="col-sm-1">
+                    <label class="profit-text">USD</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+</script>
+<!--jQuery and Bootstrap-->
+<script src="static/js/jquery-1.11.3.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+<!--<script src="../js/simuchain1_run.js"></script>-->
+
+</body>
+</html>

@@ -1,9 +1,64 @@
 from main import models
 
+def getProfit2(username, period):
+    if period == 0:
+        return 0
+    return float(models.Para.objects.get(Username=username, Param='Profit2', Period=period).Value)
+
+def getUSInv2(username, period):
+    if period == 0:
+        return 0
+    return float(models.Para.objects.get(Username=username, Param='USInv2', Period=period).Value)
+
+def getEUInv2(username, period):
+    if period == 0:
+        return 0
+    return float(models.Para.objects.get(Username=username, Param='EUInv2', Period=period).Value)
+
+def getSalesUS2(username, period):
+    if period == 0:
+        return 0
+    return float(models.Para.objects.get(Username=username, Param='SalesUS2', Period=period).Value)
+
+def getSalesEU2(username, period):
+    if period == 0:
+        return 0
+    return float(models.Para.objects.get(Username=username, Param='SalesEU2', Period=period).Value)
+
+def getDCUSInv2(username, period):
+    if period == 0:
+        return 0
+    return getUSProd(username, period-1)
+
+def getDCEUInv2(username, period):
+    if period == 0:
+        return 0
+    return getEUProd(username, period-1)
+
+def getTPDCUS2(username, period):
+    if period <= 1:
+        return 0
+    period -= 1
+    return getDCUSInv2(username, period)
+
+def getTPDCEU2(username, period):
+    if period <= 1:
+        return 0
+    period -= 1
+    return getDCEUInv2(username, period)
+
+def getEUProd(username, period):
+    if period == 0:
+        return 0
+    return float(models.Para.objects.get(Username=username, Param='EUProd', Period=period).Value)
+
+def getUSProd(username, period):
+    if period == 0:
+        return 0
+    return float(models.Para.objects.get(Username=username, Param='USProd', Period=period).Value)
 
 def getCostTranship():
     return float(models.Attr.objects.get(Attri='CostTranship').Value)
-
 
 def getCostProd(id):
     return float(models.Attr.objects.get(Attri=('CostProd' + str(id))).Value)
@@ -45,7 +100,6 @@ def getEUUS(username, period):
     if period == 0:
         return 0
     return float(models.Para.objects.get(Username=username, Param='EUUS', Period=period).Value)
-
 def getUSEU(username, period):
     if period == 0:
         return 0

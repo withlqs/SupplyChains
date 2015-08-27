@@ -29,6 +29,79 @@ def getAttribute(request):
     response['Content-Disposition'] = "attachment; filename=%s" % 'attribute.xlsx'
     return response
 
+def simulate2(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/accounts/login/')
+    username = request.user.get_username()
+    if request.method == 'GET':
+        if 'now' not in request.GET:
+            return HttpResponseRedirect('/simulate2/?now=1')
+        now = int(request.GET['now'])
+        render_list = {
+            'now': str(now),
+            'last': str(now - 1)
+        }
+        if not now <= getN():
+            render_list['form_disp'] = False
+        else:
+            render_list['form_disp'] = True
+        if now != 1:
+            render_list['info_disp'] = True
+            render_list['transUSEU'] = getUSEU(username, now-1)
+            render_list['transEUUS'] = getEUUS(username, now-1)
+            render_list['DCInv'] = getDCInv2(username, now - 1)
+            render_list['USInv'] = getUSInv2(username, now - 1)
+            render_list['EUInv'] = getEUInv2(username, now - 1)
+            render_list['SalesUS'] = getSalesUS(username, now - 1)
+            render_list['SalesEU'] = getSalesEU(username, now - 1)
+            render_list['Profit'] = getProfit(username, now - 1)
+        else:
+            render_list['info_disp'] = False
+            ClearUserData(username)
+        return render_to_response('simulate.html', render_list, context_instance=RequestContext(request))
+    else:
+        period = int(request.POST['now'])
+        models.Para(Username=username, Param='EUProd', Period=period, Value=float(request.POST['ProdEU'])).save()
+        models.Para(Username=username, Param='USProd', Period=period, Value=float(request.POST['ProdUS'])).save()
+        Set(
+            username,
+            'USInv2',
+            period,
+            getUSInv(username, period-1)
+            +getTPDCUS2(username, period-1)
+            -getSalesUS2(username, period-1)
+        )
+        Set(
+            username,
+            'EUInv2',
+            period,
+            getEUInv(username, period-1)
+            +getTPDCEU2(username, period-1)
+            -getSalesEU2(username, period-1)
+        )
+        Set(
+            username,
+            'SalesUS2',
+            period,
+            min(getDemandUS(period), getUSInv2(username, period))
+        )
+        Set(
+            username,
+            'SalesEU2',
+            period,
+            min(getDemandEU(period), getEUInv2(username, period))
+        )
+        Set(
+            username,
+            'Profit2',
+            period,
+            (1+getRate())*getProfit2(username, period-1)
+            +getPriceUS()*getSalesUS2(username, period)
+            +getRateEU(period)*getPriceEU()*getSalesEU2(username, period)
+            -getRateCNY(period)*getCostProd(2)*(getUSProd(username, period)+getEUProd(username, period))
+        )
+        return HttpResponseRedirect('/simulate2/?now=' + str(period + 1))
+
 def simulate(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login/')
@@ -47,6 +120,8 @@ def simulate(request):
             render_list['form_disp'] = True
         if now != 1:
             render_list['info_disp'] = True
+            render_list['transUSEU'] = getUSEU(username, now-1)
+            render_list['transEUUS'] = getEUUS(username, now-1)
             render_list['DCInv'] = getDCInv(username, now - 1)
             render_list['USInv'] = getUSInv(username, now - 1)
             render_list['EUInv'] = getEUInv(username, now - 1)
@@ -68,17 +143,20 @@ def simulate(request):
             username,
             'DCInv',
             period,
-            getDCInv(username, period - 1) + getProd(username, period - 1) - getDCUS(username, period - 1) - getDCEU(
-                username, period - 1)
+            getDCInv(username, period - 1)
+            +getProd(username, period - 1)
+            -getDCUS(username, period - 1)
+            -getDCEU(username, period - 1)
         )
         Set(
             username,
             'USInv',
             period,
-            getUSInv(username, period - 1) + getTPDCUS(username, period - 1) + getTPEUUS(username,
-                                                                                         period - 1) - getUSEU(username,
-                                                                                                               period - 1) - getSalesUS(
-                username, period - 1)
+            getUSInv(username, period - 1)
+            +getTPDCUS(username, period - 1)
+            +getTPEUUS(username, period - 1)
+            -getUSEU(username, period - 1)
+            -getSalesUS(username, period - 1)
         )
         Set(
             username,
