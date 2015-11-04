@@ -87,11 +87,13 @@ def simulate2(request):
             render_list['Profit'] = getProfit2(username, now - 1)
             lst = []
             for period in range(1, now):
-                lst.append({
-                    'id': period,
-                    'profit': getProfit2(username, period)
-                })
+                lst.append(getProfit2(username, period))
+                # lst.append({
+                #     'id': period,
+                #     'profit': getProfit2(username, period)
+                # })
             render_list['ProfitData'] = lst
+            setGraphProfitVals(username,2,1.1314)
         else:
             render_list['info_disp'] = False
         return render_to_response('simulate2.html', render_list, context_instance=RequestContext(request))
@@ -137,6 +139,8 @@ def simulate2(request):
             + getRateEU(period) * getPriceEU() * getSalesEU2(username, period)
             - getRateCNY(period) * getCostProd(2) * (getUSProd(username, period) + getEUProd(username, period))
         )
+        # username = request.user.get_username() #to change list: test to delete this line
+        updateUserActivity(username)
         return HttpResponseRedirect('/simulate2/?now=' + str(period + 1))
 
 
@@ -175,6 +179,7 @@ def simulate(request):
                     'profit': getProfit(username, period)
                 })
             render_list['ProfitData'] = lst
+            setGraphProfitVals(username,1,lst)
         else:
             render_list['info_disp'] = False
         return render_to_response('simulate.html', render_list, context_instance=RequestContext(request))
@@ -235,12 +240,16 @@ def simulate(request):
                 period) * getPriceEU() * getSalesEU(username, period) - getRateCNY(period) * getCostProd(1) * getProd(
                 username, period) - getCostTranship() * (getUSEU(username, period) + getEUUS(username, period))
         )
+        username = request.user.get_username()
+        updateUserActivity(username)
         return HttpResponseRedirect('/simulate/?now=' + str(period + 1))
 
 
 def success(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login/')
+    username = request.user.get_username()
+    updateUserActivity(username)
     return render_to_response('success.html', context_instance=RequestContext(request))
 
 
@@ -279,8 +288,17 @@ def manage_view(request):
             models.Attr(Attri='RateCNY', Period=int(i + 1), Value=float(wb['Rate']['B' + str(3 + i)].value)).save()
             models.Attr(Attri='RateEU', Period=int(i + 1), Value=float(wb['Rate']['C' + str(3 + i)].value)).save()
         return HttpResponseRedirect('/success/')
+
+
     else:
-        return render_to_response('manage.html', context_instance=RequestContext(request))
+        # users=getallusers()
+        users= User.objects.all()
+        para= getallusers()
+        activities=getallactivities()
+        graphs=getallgraphs()
+        return render_to_response('manage.html', {'allusers':users,'para':para,'activities':activities,'graphs':graphs},context_instance=RequestContext(request))
+        # return render_to_response('manage.html', )
+
 
 
 def login(request):
@@ -306,6 +324,7 @@ def register(request):
             form.save()
             auth.login(request, user=authenticate(username=form.cleaned_data['username'],
                                                   password=form.cleaned_data['password1']))
+            createUserActivity(form.cleaned_data['username'],timezone.now())
             return HttpResponseRedirect('/manage/')
     else:
         form = forms.UserCreationForm()

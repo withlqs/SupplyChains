@@ -1,0 +1,112 @@
+python: can't open file 'manager.py': [Errno 2] No such file or directory
+python: can't open file 'manager.py': [Errno 2] No such file or directory
+Error: That port is already in use.
+['manage.py', 'runserver']
+/usr/lib/python3.4/site-packages/django/db/backends/mysql/base.py:124: Warning: Column 'date_joined' cannot be null
+  return self.cursor.execute(query, args)
+
+[30/Oct/2015 17:47:35] "GET /simulate2/?now=5 HTTP/1.0" 200 14308
+[30/Oct/2015 17:47:36] "GET /favicon.ico HTTP/1.0" 200 1781
+[30/Oct/2015 17:47:44] "GET / HTTP/1.0" 200 1781
+[30/Oct/2015 17:47:44] "GET /favicon.ico HTTP/1.0" 200 1781
+[30/Oct/2015 17:47:47] "GET /simulate2/?now=5 HTTP/1.0" 200 14308
+[30/Oct/2015 17:47:47] "GET /favicon.ico HTTP/1.0" 200 1781
+[30/Oct/2015 17:48:05] "GET /accounts/logout/ HTTP/1.0" 302 0
+[30/Oct/2015 17:48:05] "GET /accounts/login/ HTTP/1.0" 200 1693
+[30/Oct/2015 17:48:05] "GET /favicon.ico HTTP/1.0" 302 0
+[30/Oct/2015 17:48:05] "GET /accounts/login/ HTTP/1.0" 200 1693
+[30/Oct/2015 17:50:10] "POST /accounts/login/ HTTP/1.0" 302 0
+[30/Oct/2015 17:50:11] "GET /accounts/profile/ HTTP/1.0" 302 0
+[30/Oct/2015 17:50:11] "GET / HTTP/1.0" 200 1781
+[30/Oct/2015 17:50:11] "GET /favicon.ico HTTP/1.0" 200 1781
+[30/Oct/2015 17:50:15] "GET /simulate/ HTTP/1.0" 302 0
+[30/Oct/2015 17:50:15] "GET /simulate/?now=1 HTTP/1.0" 200 17536
+[30/Oct/2015 17:50:16] "GET /favicon.ico HTTP/1.0" 200 1781
+[30/Oct/2015 17:50:24] "POST /simulate/?now=1 HTTP/1.0" 302 0
+[30/Oct/2015 17:50:25] "GET /simulate/?now=2 HTTP/1.0" 200 17628
+[30/Oct/2015 17:50:25] "GET /favicon.ico HTTP/1.0" 200 1781
+[30/Oct/2015 17:58:35] "GET / HTTP/1.0" 302 0
+[30/Oct/2015 17:58:36] "GET /accounts/login/ HTTP/1.0" 200 1693
+[30/Oct/2015 19:11:07] "GET /networkmap/index.html HTTP/1.0" 302 0
+[30/Oct/2015 19:22:05] "GET /networkmap/index.html HTTP/1.0" 302 0
+[30/Oct/2015 19:46:03] "GET / HTTP/1.0" 302 0
+[30/Oct/2015 19:46:06] "GET / HTTP/1.0" 302 0
+[30/Oct/2015 19:51:34] "GET /robots.txt HTTP/1.0" 302 0
+[30/Oct/2015 19:51:35] "GET /accounts/login/ HTTP/1.0" 200 1693
+[30/Oct/2015 19:51:35] "GET / HTTP/1.0" 302 0
+[30/Oct/2015 19:51:36] "GET /accounts/login/ HTTP/1.0" 200 1693
+[30/Oct/2015 19:53:30] "GET /static/css/login.css HTTP/1.0" 200 812
+[30/Oct/2015 19:53:30] "GET /static/css/bootstrap.min.css HTTP/1.0" 200 122544
+[30/Oct/2015 20:31:16] "GET / HTTP/1.0" 302 0
+[30/Oct/2015 20:31:19] "GET / HTTP/1.0" 302 0
+[30/Oct/2015 21:08:54] "GET / HTTP/1.0" 302 0
+[30/Oct/2015 21:08:54] "GET /accounts/login/ HTTP/1.0" 200 1693
+[30/Oct/2015 21:08:55] "GET /favicon.ico HTTP/1.0" 302 0
+[30/Oct/2015 21:08:55] "GET /accounts/login/ HTTP/1.0" 200 1693
+[30/Oct/2015 21:34:43] "GET / HTTP/1.0" 302 0
+[30/Oct/2015 21:34:46] "GET / HTTP/1.0" 302 0
+[30/Oct/2015 23:26:18] "GET /config/isp_verify_user? HTTP/1.0" 302 0
+[30/Oct/2015 23:47:09] "GET / HTTP/1.0" 302 0
+[30/Oct/2015 23:47:09] "GET /accounts/login/ HTTP/1.0" 200 1693
+[31/Oct/2015 00:06:56] "GET / HTTP/1.0" 200 1781
+[31/Oct/2015 00:06:57] "GET /favicon.ico HTTP/1.0" 200 1781
+['manage.py', 'runserver']
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 30, 2015 - 17:47:21
+Django version 1.8.5, using settings 'SupplyChains.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x94f67d4>
+['manage.py', 'runserver']
+Traceback (most recent call last):
+  File "/usr/lib/python3.4/site-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/lib/python3.4/site-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/lib/python3.4/site-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/lib/python3.4/site-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/lib/python3.4/site-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/lib/python3.4/site-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/lib/python3.4/site-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/local/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/php-fpm/SupplyChains/SupplyChains/main/models.py", line 7, in <module>
+    from django.contrib.postgres.fields import ArrayField
+  File "/usr/lib/python3.4/site-packages/django/contrib/postgres/fields/__init__.py", line 1, in <module>
+    from .array import *  # NOQA
+  File "/usr/lib/python3.4/site-packages/django/contrib/postgres/fields/array.py", line 4, in <module>
+    from django.contrib.postgres.forms import SimpleArrayField
+  File "/usr/lib/python3.4/site-packages/django/contrib/postgres/forms/__init__.py", line 3, in <module>
+    from .ranges import *  # NOQA
+  File "/usr/lib/python3.4/site-packages/django/contrib/postgres/forms/ranges.py", line 1, in <module>
+    from psycopg2.extras import DateRange, DateTimeTZRange, NumericRange
+  File "/usr/lib/python3.4/site-packages/psycopg2/__init__.py", line 50, in <module>
+    from psycopg2._psycopg import BINARY, NUMBER, STRING, DATETIME, ROWID
+ImportError: No module named _psycopg
+['manage.py', 'runserver']
+Traceback (most recent call last):
+  File "manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/lib/python3.4/site-packages/django/core/management/__init__.py", line 351, in execute_from_command_line
+    utility.execute()
+  File "/usr/lib/python3.4/site-packages/django/core/management/__init__.py", line 343, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/lib/python3.4/site-packages/django/core/management/__init__.py", line 177, in fetch_command
+    commands = get_commands()
+  File "/usr/lib/python3.4/site-packages/django/utils/lru_cache.py", line 101, in wrapper
+    result = user_function(*args, **kwds)
+  File "/usr/lib/python3.4/site-packages/django/core/management/__init__.py", line 72, in get_commands
+    for app_config in reversed(list(apps.get_app_configs())):
+  File "/usr/lib/python3.4/site-packages/django/apps/registry.py", line 137, in get_app_configs
+    self.check_apps_ready()
+  File "/usr/lib/python3.4/site-packages/django/apps/registry.py", line 124, in check_apps_ready
+    raise AppRegistryNotReady("Apps aren't loaded yet.")
+django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
+['manage.py', 'runserver']

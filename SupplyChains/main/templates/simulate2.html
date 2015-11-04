@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <meta name="viewport" content="width=2048" /> -->
     <title>Simulation_Supply-Chain-2</title>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="/static/css/simulation2.css" rel="stylesheet">
-
     <script src="/static/js/jscharts.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Quicksand" />
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="/static/js/html5shiv.js"></script>
@@ -32,171 +33,272 @@
         }
         window.onload = displayTime;
     </script>
+
+
 </head>
 <body>
-<span id="time"></span>
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6 col-sm-offset-6">
-            <div class="col-sm-2">
-                <a href="/accounts/logout/" class="btn btn-info" role="button">Log Out</a>
-            </div>
-            <div class="col-sm-2">
-                <a href="/" class="btn btn-info" role="button">Choose Chains</a>
-            </div>
-        </div>
-    </div>
+<!--navigation bar-->
+<div class="navbar">
+<ul style="list-style-type:none;">
+    {% if user.is_authenticated %}
+    <li style="display:inline;"> Welcome {{ user.username }} {{ user.last_login }} is yours!</li>
+    {% else %}
+    <li> Welcome </li>
+    {% endif %}
+    <li style="display:inline;" id="time"></li>
+   
+    <li style="display:inline;float:right;">
+        <div class="navbtn"><a href="/accounts/logout/" class="btn btn-info" role="button">Log Out</a><div>
+    </li>
+     <li style="display:inline; float:right;">
+        <div class="navbtn"><a href="/" class="btn btn-info" role="button">Choose Chains</a></div>
+    </li>
+</ul>
 </div>
+
+
 <!--Simulation Page-->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 text-center">
-            <h2>Chain 2 Manage Simulation</h2>
+<div class="content">
 
-            <div class="well well-lg text-info head-desc">Supply Chain 2: this is a much simpler supply chain. The
-                production/shipping for US and EU markets are totally separated.
+<!--information description-->
+<div class="head-info">
+        <div class="well well-lg text-info head-desc" style="float:left">
+            <h3>Supply Chain 2 Manage Simulation</h3>
+            <!-- <h3> Supply Chain 2 </h3> -->
+            <p> This is a much simpler supply chain. </p>
+            <p> The production/shipping for US and EU markets are totally separated.</p>
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#attributeinfo" style="float:right"> View Attribute</button>
+        </div>
+       
+  <!-- Modal -->
+  
+        
+        <div class="modal fade" id="attributeinfo" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Supply Chain 2 Attributes Information</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                            
+                             <table id="attribute-info" style="width:100%">
+                             <tr>
+                                <td></td>
+                                <td colspan="2"> Production Cost </td>
+                                <td colspan="2"> Selling Price(Same w/wo UPS) </td>
+                                <td></td>
+                                <td></td>
+                             </tr>
+                             <tr>
+                                <td>Total Periods(N)</td>
+                                <td>With UPS</td>
+                                <td>Without UPS</td>
+                                <td>US(USD)</td>
+                                <td>Europe(EURO)</td>
+                                <td>Transship(USD)</td>
+                                <td>Interest Rate(r)</td>
+                             </tr>
+                             <tr>
+                                <td class="value">15</td>
+                                <td class="value">110</td>
+                                <td class="value">100</td>
+                                <td class="value">30</td>
+                                <td class="value">30</td>
+                                <td class="value">2</td>
+                                <td class="value">0.5%</td>
+                             </tr>
+                             </table>
+                        
+                        
+                    </div>
+                    
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> Close</button>
+                    </div>
+                    
+                </div>
             </div>
         </div>
-        <div class="col-sm-4 text-center" style="margin-top: 130px">
-            <p style="font-family: FontAwesome">Click <a href="/attribute.xlsx">here</a> to review system's attributes.
-            </p>
-        </div>
-    </div>
+        
+
+         
 </div>
 
-<div class="row">
-    <div class="col-sm-2">
-        <div class="text-center"><label class="dis_name">Plant</label></div>
-        <img class="img-responsive" src="/static/img/factory.png">
 
-    </div>
-    <div class="col-sm-1">
-        <img class="img-responsive" style="margin-top: 120px" src="/static/img/arrow.jpg">
-    </div>
-    <div class="col-sm-2">
-        <div class="text-center"><label class="dis_name">DC</label></div>
-        <img class="img-responsive" style="margin-top: 30px" src="/static/img/Simulation-DC.jpg">
 
-        <div class="panel panel-primary">
-            <div class="panel-heading panelhead-cus">Inventory</div>
-            <div class="panel-body panel-text"><label class="dis_label" id="dis_inventoryDC_US">{{ DCUSInv }}</label>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-1">
-        <img class="img-responsive" style="margin-top: 120px" src="/static/img/arrow.jpg">
-    </div>
-    <div class="col-sm-2">
-        <div style="margin-top: 80px">
-            <img src="/static/img/ship.jpg" class="img-responsive center-block">
+<!--graphic demonstration display-->
+{% if form_disp %}
+<form class="form-horizontal" action="/simulate2/?now={{ now }}" method="post">{% csrf_token %}
+               
+<div class="info-table">
+<table id="graphicdisplay" style="width:100%">
+<tr>
+    <td id="input">
+        <ul style="list-style-type:none">
+            <li class="upperlabel">US Production</li>
+            <li class="field">
+                 <div class="form-group">
+                    <!-- <label for="Prod" class="col-sm-2 control-label">Input Production:</label> -->
+                        <input type="text" class="form-control" id="Prod" name="ProdUS" placeholder="Enter Input Production"
+                               required autofocus>
+                </div>
+            </li>
+        </ul>
+    </td>
+    <td id="arrow"></td>
+    <td id="output"> 
+        <ul style="list-style-type:none">
+            <li class="upperlabel">Inventory</li>
+            <li class="field">
+                <label class="dis_label" id="dis_inventoryDC_US">{{ DCUSInv }}</label>
+            </li>
+        </ul>
+    </td>
+    <td id="arrow"></td>
+    <td id="output">
+        <ul style="list-style-type:none">
+            <li class="upperlabel">Transport</li>
+            <li class="field">
+                <label class="control-label dis_transDC2US" id="dis_transDC2US">{{ TPDCUS }}</label>
+            </li>
+        </ul>
+    </td>
+    <td id="arrow"></td>
+    <td id="output">
+         <ul style="list-style-type:none;float:left">
+            <li class="upperlabel">Sales</li>
+            <li class="field-multi-left">
+             <label class="dis_label" id="dis_saleUS">{{ SalesUS }}</label>
+             
+            </li>
+        </ul>
+        <ul style="list-style-type:none">
+            <li class="upperlabel">Demand</li>
+            <li class="field-multi-right">
+             <label class="dis_label" id="dis_inventoryUS">{{ USInv }}</label>     
+            </li>
+        </ul>
 
-            <div class="panel panel-primary trans-cus">
-                <div class="panel-heading"><h3 class="panel-title">Transport</h3></div>
-                <div class="panel-body">
-                    <label class="control-label dis_transDC2US" id="dis_transDC2US">{{ TPDCUS }}</label>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-1">
-        <img class="img-responsive" style="margin-top: 120px" src="/static/img/arrow.jpg">
-    </div>
-    <div class="col-sm-2">
-        <div style="margin-top: 80px">
-            <div class="text-center"><label>US</label></div>
-            <img src="/static/img/demand.jpg" class="img-responsive center-block">
-        </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Sale</h3>
-            </div>
-            <div class="panel-body">
-                <label class="dis_label" id="dis_saleUS">{{ SalesUS }}</label>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-1">
-        <div style="margin-top: 100px">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Inventory</h3>
-                </div>
-                <div class="panel-body">
-                    <label class="dis_label" id="dis_inventoryUS">{{ USInv }}</label>
-                </div>
-            </div>
-        </div>
-    </div>
+    </td>
+</tr>
+
+<tr>
+    <td id="place"><img  src="/static/img/factory.png"></td>
+    <td id="arrow"> <img  src="/static/img/arrow.jpg"></td>
+    <td id="place"><img src="/static/img/Simulation-DC.jpg"></td>
+    <td id="arrow"> <img  src="/static/img/arrow.jpg"></td>
+    <td id="place"> <img  src="/static/img/ship.jpg"></td>
+    <td id="arrow"> <img src="/static/img/arrow.jpg"></td>
+    <td id="place"> <img src="/static/img/demand.jpg"></td>
+</tr>
+<tr>
+    <td id="place"><p>Plant</p></td>
+    <td id="arrow"></td>
+    <td id="place"><p>DC</p></td>
+    <td id="arrow"></td>
+    <td id="place"><p>Transport</p></td>
+    <td id="arrow"></td>
+    <td id="place"><p>US</p></td>
+</tr>
+</table>
 </div>
 
-<div class="row">
-    <div class="col-sm-2">
-        <div class="text-center"><label class="dis_name">Plant</label></div>
-        <img class="img-responsive" src="/static/img/factory.png">
-    </div>
-    <div class="col-sm-1">
-        <img class="img-responsive" style="margin-top: 120px" src="/static/img/arrow.jpg">
-    </div>
-    <div class="col-sm-2">
-        <div class="text-center"><label class="dis_name">DC</label></div>
-        <img class="img-responsive" style="margin-top: 30px" src="/static/img/Simulation-DC.jpg">
+<div class="info-table">
+<table id="graphicdisplay" style="width:100%">
+<tr>
+    <td id="input">
+        <ul style="list-style-type:none">
+            <li class="upperlabel">EU Production</li>
+            <li class="field">
+                 <div class="form-group">
+                    <!-- <label for="DCUS" class="col-sm-2 control-label">Input EU Production:</label> -->
+                        <input type="text" class="form-control" id="DCUS" name="ProdEU" placeholder="Enter Input Production"
+                               required autofocus>
+                </div>
+            </li>
+        </ul>
+    </td>
+    <td id="arrow"></td>
+    <td id="output"> 
+        <ul style="list-style-type:none">
+            <li class="upperlabel">Inventory</li>
+            <li class="field">
+                <label class="dis_label" id="dis_inventoryDC_US">{{ DCEUInv }}</label>
+            </li>
+        </ul>
+    </td>
+    <td id="arrow"></td>
+    <td id="output">
+        <ul style="list-style-type:none">
+            <li class="upperlabel">Transport</li>
+            <li class="field">
+                <label class="control-label dis_transDC2US" id="dis_transDC2US">{{ TPDCEU }}</label>
+            </li>
+        </ul>
+    </td>
+    <td id="arrow"></td>
+    <td id="output">
+         <ul style="list-style-type:none;float:left">
+            <li class="upperlabel">Sales</li>
+            <li class="field-multi-left">
+             <label class="dis_label" id="dis_saleUS">{{ SalesEU }}</label>
+             
+            </li>
+        </ul>
+        <ul style="list-style-type:none">
+            <li class="upperlabel">Demand</li>
+            <li class="field-multi-right">
+             <label class="dis_label" id="dis_inventoryUS">{{ EUInv }}</label>     
+            </li>
+        </ul>
 
-        <div class="panel panel-primary">
-            <div class="panel-heading panelhead-cus">Inventory</div>
-            <div class="panel-body panel-text"><label class="dis_label" id="dis_inventoryDC_EU">{{ DCEUInv }}</label>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-1">
-        <img class="img-responsive" style="margin-top: 120px" src="/static/img/arrow.jpg">
-    </div>
-    <div class="col-sm-2">
-        <div style="margin-top: 80px">
-            <img src="/static/img/ship.jpg" class="img-responsive center-block">
+    </td>
+</tr>
 
-            <div class="panel panel-primary trans-cus">
-                <div class="panel-heading"><h3 class="panel-title">Transport</h3></div>
-                <div class="panel-body">
-                    <label class="control-label dis_transDC2US" id="dis_transDC2EU">{{ TPDCEU }}</label>
+<tr>
+    <td id="place"><img  src="/static/img/factory.png"></td>
+    <td id="arrow"> <img  src="/static/img/arrow.jpg"></td>
+    <td id="place"><img src="/static/img/Simulation-DC.jpg"></td>
+    <td id="arrow"> <img  src="/static/img/arrow.jpg"></td>
+    <td id="place"> <img  src="/static/img/ship.jpg"></td>
+    <td id="arrow"> <img src="/static/img/arrow.jpg"></td>
+    <td id="place"> <img src="/static/img/demand.jpg"></td>
+</tr>
+<tr>
+    <td id="place"><p>Plant</p></td>
+    <td id="arrow"></td>
+    <td id="place"><p>DC</p></td>
+    <td id="arrow"></td>
+    <td id="place"><p>Transport</p></td>
+    <td id="arrow"></td>
+    <td id="place"><p>EU</p></td>
+</tr>
+</table>
+</div>
+   
+                <input type="hidden" name="now" value="{{ now }}"/>
+
+                <div class="form-group">
+                    <div class="col-sm-3 col-sm-offset-2" style="float:right;">
+                        <input type="submit" class="btn btn-block btn-info btn-lg run-cus" value="RUN">
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-1">
-        <img class="img-responsive" style="margin-top: 120px" src="/static/img/arrow.jpg">
-    </div>
-    <div class="col-sm-2">
-        <div style="margin-top: 80px">
-            <div class="text-center"><label>EU</label></div>
-            <img src="/static/img/demand.jpg" class="img-responsive center-block">
-        </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Sale</h3>
-            </div>
-            <div class="panel-body">
-                <label class="dis_label" id="dis_salesEU">{{ SalesEU }}</label>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-1">
-        <div style="margin-top: 100px">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Inventory</h3>
-                </div>
-                <div class="panel-body">
-                    <label class="dis_label" id="dis_inventoryEU">{{ EUInv }}</label>
-                </div>
-            </div>
-        </div>
-    </div>
+            </form>
+            {% endif %}
+</div>
 </div>
 
+
+<!-- previous form
 {% if form_disp %}
     <div class="row">
         <div class="col-sm-11 col-sm-offset-1">
+
+
             <form class="form-horizontal" action="/simulate2/?now={{ now }}" method="post">{% csrf_token %}
                 <div class="form-group">
                     <label for="Prod" class="col-sm-2 control-label">Input US Production:</label>
@@ -206,6 +308,8 @@
                                required autofocus>
                     </div>
                 </div>
+
+
                 <div class="form-group">
                     <label for="DCUS" class="col-sm-2 control-label">Input EU Production:</label>
 
@@ -222,9 +326,11 @@
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 {% endif %}
+-->
 
 <div class="row" style="margin-top: 50px">
     <div class="col-sm-8">
@@ -247,9 +353,9 @@
     </div>
 </div>
 
-{% for node in ProfitData %}
+<!-- {% for node in ProfitData %}
     <label hidden id="Profit{{ node.id }}">{{ node.profit }}</label>
-{% endfor %}
+{% endfor %} -->
 
 
 <script type="text/javascript">
@@ -283,6 +389,15 @@
         myChart.draw();
     }
 </script>
+ <script language="javascript">
+        function autoResizeDiv()
+        {
+            document.getElementById('content').style.height = window.innerHeight +'px';
+        }
+        window.onresize = autoResizeDiv;
+        autoResizeDiv();
+</script>
+
 <!--jQuery and Bootstrap-->
 <script src="/static/js/jquery-1.11.3.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>

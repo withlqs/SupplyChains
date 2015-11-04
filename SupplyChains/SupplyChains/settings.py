@@ -25,7 +25,7 @@ SECRET_KEY = '2iqsmiy5tk_g=v!#twjis@-3kyk4hej(8@*p*=x*8h!=0d^eqe'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,7 +37,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'south',
     'main',
+
+    # 'accounts',
+    
 )
 
 MIDDLEWARE_CLASSES = (
@@ -49,6 +53,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    #customized middle ware
+    'SupplyChains.middleware.lastactivity_middleware.StatusMiddleware',
+    # 'SupplyChains.middleware.lastactivity_middleware.ActivityMiddleware',
 )
 
 ROOT_URLCONF = 'SupplyChains.urls'
@@ -110,3 +117,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+# User model
+# AUTH_USER_MODEL = 'accounts.User'

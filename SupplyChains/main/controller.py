@@ -1,4 +1,9 @@
 from main import models
+from django.contrib.auth.models import User, Permission
+from django.db.models import Q
+from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
+
 
 
 def ClearData1(username, period):
@@ -222,3 +227,45 @@ def getProfit(username, period):
 
 def ClearUserData(username):
     models.Para.objects.filter(Username=username).delete()
+
+
+def getallusers():
+    # perm = Permission.objects.get(codename='blogger')
+    # users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm) ).distinct()
+    users=models.Para.objects.all()
+    return users
+
+def getallactivities():
+    activities=models.UserUtil.objects.all()
+    return activities
+def getallgraphs():
+    graphs=models.UserGraphUtil.objects.all()
+    return graphs
+
+def createUserActivity(username, activitydatetime):
+    models.UserUtil(Username=username, last_activity=activitydatetime).save()
+
+def updateUserActivity(username):
+    setUserActivity(username,timezone.now())
+
+def setUserActivity(username, activitydatetime):
+    try:
+        obj=models.UserUtil.objects.get(Username=username)
+        obj.last_activity=activitydatetime
+        obj.save()
+    except ObjectDoesNotExist:
+        createUserActivity(username,timezone.now())
+    # models.UserUtil(Username=username, last_activity=activitydatetime).save()
+
+def createProfitGraphVals(username,mode,vals):
+    models.UserGraphUtil(Username=username,graph_mode=mode,profit_vals=vals).save()
+
+def setGraphProfitVals(username,mode,vals):
+    try:
+        obj=models.UserGraphUtil.objects.get(Username=username,graph_mode=mode)
+        obj.profit_vals=vals
+        obj.save()
+    except ObjectDoesNotExist:
+        createProfitGraphVals(username,mode,vals)
+
+

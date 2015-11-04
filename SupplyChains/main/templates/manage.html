@@ -46,7 +46,9 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
                 <li class="active"><a href="/manage/"><i class="fa fa-fw fa-dashboard"></i>Overview</a></li>
-                <li><a href="/log.csv"><i class="fa fa-fw fa-bar-chart-o"></i>Download Log File</a></li>
+                <!-- <li class="active"><a href="/manage/"><i class="fa fa-fw fa-dashboard"></i>View All Users</a></li> -->
+                <!-- <li class="active"><a href="/manage/"><i class="fa fa-fw fa-dashboard"></i>Overview</a></li> -->
+                <!-- <li><a href="/log.csv"><i class="fa fa-fw fa-bar-chart-o"></i>Download Log File</a></li> -->
             </ul>
         </div>
 
@@ -66,7 +68,7 @@
             </ol>
         </div>
     </div>
-
+<!-- 
     <div class="col-sm-12">
         <h3>Please upload a data file:</h3>
 
@@ -74,6 +76,97 @@
             <label class="control-label">Excel File:</label>
             <input name="file" id="file" type="file" class="file" data-show-preview="false">
         </form>
+    </div>
+ -->    
+  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#attributeinfo"> View All Usernames</button>
+ <div class="modal fade" id="attributeinfo" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">List of All Registered Users</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        {% if allusers %}
+                        
+                         {% for i in allusers %}
+                        <p>{{ i }}</p>
+                         {% endfor %}
+                
+                         {% endif %} 
+                    </div>
+                    
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+ <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#attributeinfo1"> View All Queries</button>
+ <div class="modal fade" id="attributeinfo1" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">List of All Registered Users</h4>
+                    </div>
+
+                    <div class="modal-body">
+                      {% for i in para %}
+                         <li>{{ i.Username}}: {{ i.Param }}: {{ i.Value }}</li>
+                     {% endfor %}
+                    </div>
+                    
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#attributeinfo2"> View All UserActivities</button>
+ <div class="modal fade" id="attributeinfo2" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">List of All Registered Users</h4>
+                    </div>
+
+                    <div class="modal-body">
+                       {% for i in activities %}
+                         <li>{{ i.Username}}: {{i.last_activity}}</li>
+                        
+                        {% endfor %}
+
+                    </div>
+                    
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<div class="usergraphs">
+     {% for i in graphs %}
+        <p>{{ i.Username}} Latest Simulation {{i.graph_mode}} Graph</p>
+                        
+    {% endfor %}
+
+  <!--   <div id="profitChart" class="col-sm-4 charts">
+    </div> -->
+</div>
+ <div class="col-sm-12">
+    <!-- {% load i18n %} -->
+   <!--  <p>{{ user.last_login }}</p> 
+    <p>{{ user.date_joined }}</p>
+    <p>{{ user.last_activity }}</p> -->
+    <!-- Activity: {{ profile.last_active }} -->
+   
+
     </div>
 
 </div>
@@ -95,6 +188,28 @@
     </div>
 </div>
 <!--=====================-->
+<script type="text/javascript">
+    {% for i in graphs%}
+    var N ={{ i.profit_vals}};
+    
+    if (N.length> 2) {
+        // NEED TO DO HERE
 
+        var myChart = new JSChart('profitChart', 'line');
+        myChart.setDataArray(N);
+        myChart.setTitle('Chain 1 Profit');
+        myChart.setTitleColor('#8E8E8E');
+        myChart.setTitleFontSize(11);
+        myChart.setLineWidth(3);
+        myChart.setAxisNameX('Period');
+        myChart.setAxisNameY('');
+
+        myChart.setAxisColor('#BFD402');
+        myChart.setAxisValuesColor('#95A605');
+        myChart.setSize(616, 321);
+        myChart.draw();
+    }
+    {% endfor %}
+</script>
 </body>
 </html>
