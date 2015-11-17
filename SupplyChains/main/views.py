@@ -1,5 +1,5 @@
 import os
-
+import json
 from django.shortcuts import render_to_response
 from django.shortcuts import RequestContext
 from django.contrib.auth import forms
@@ -37,6 +37,7 @@ def choose(request):
         return HttpResponseRedirect('/accounts/login/')
     username = request.user.get_username()
     render_list = {}
+    render_list['username'] = username
     if username == admin:
         render_list['admin'] = True
     else:
@@ -86,14 +87,17 @@ def simulate2(request):
             render_list['EUInv'] = getEUInv2(username, now - 1)
             render_list['Profit'] = getProfit2(username, now - 1)
             lst = []
+            vals = []
             for period in range(1, now):
-                lst.append(getProfit2(username, period))
-                # lst.append({
-                #     'id': period,
-                #     'profit': getProfit2(username, period)
-                # })
+                lst.append({
+                    'id': period,
+                    'profit': getProfit2(username, period)
+                })
+                vals.append(getProfit2(username, period))
             render_list['ProfitData'] = lst
-            setGraphProfitVals(username,2,1.1314)
+            if len(lst) > 1:
+                vals=json.dumps(vals)
+                setGraphProfitVals(username,2,vals)
         else:
             render_list['info_disp'] = False
         return render_to_response('simulate2.html', render_list, context_instance=RequestContext(request))
@@ -173,13 +177,17 @@ def simulate(request):
             render_list['SalesEU'] = getSalesEU(username, now - 1)
             render_list['Profit'] = getProfit(username, now - 1)
             lst = []
+            vals = []
             for period in range(1, now):
                 lst.append({
                     'id': period,
                     'profit': getProfit(username, period)
                 })
+                vals.append(getProfit(username, period))
             render_list['ProfitData'] = lst
-            setGraphProfitVals(username,1,lst)
+            if len(lst) > 1:
+                vals=json.dumps(vals)
+                setGraphProfitVals(username,1,vals)
         else:
             render_list['info_disp'] = False
         return render_to_response('simulate.html', render_list, context_instance=RequestContext(request))
@@ -296,6 +304,18 @@ def manage_view(request):
         para= getallusers()
         activities=getallactivities()
         graphs=getallgraphs()
+        profit_vals_all=[]
+        for g in graphs:
+            # print g.profit_vals
+            # ,'all_vals':profit_vals_all
+            # profit_vals_all.append(json.loads(g.profit_vals))
+            g.profit_vals=json.loads(str(g.profit_vals))
+            # print g.profit_vals
+            # print type(g.profit_vals)
+            # a=json.loads(str(g.profit_vals))
+            # print type(a)
+            # # print a[0]
+            # print json.loads(g.profit_vals)[0]
         return render_to_response('manage.html', {'allusers':users,'para':para,'activities':activities,'graphs':graphs},context_instance=RequestContext(request))
         # return render_to_response('manage.html', )
 

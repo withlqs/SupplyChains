@@ -39,7 +39,7 @@
 <body>
 
 <!--navigation bar-->
-<div class="navbar">
+<div class="customizednavbar">
 <ul style="list-style-type:none;">
     {% if user.is_authenticated %}
     <li style="display:inline;"> Welcome {{ user.username }}!</li>
@@ -172,21 +172,45 @@
         </td>
         </tr>
         </table> -->
+         
+           
 
-        <div class="panel panel-primary" style="max-height:90px;">
-            <div class="panel-heading"><h3 class="panel-title">Inventory</h3></div>
+        <div class="paneltuple">
+            <table style="width:100%;height:100%">
+                <tr>
+                <td class="upper-label-left">
+                 Sales
+                </td>
+                <td class="upper-label-right">
+                Demand
+                </td>
+                </tr>
+                 <tr>
+                <td class="field-multi-left">
+                  <label class="dis_label" id="dis_saleUS">{{ SalesUS }}</label>
+                </td>
+                <td class="field-multi-right">
+                 <label class="control-label dis_label" id="dis_inventoryUS">{{ USInv }}   
+                </td>
+                </tr>
+            </table>
+            
+            
+        </div>
+     <!--    <div class="panel panel-primary" style="max-height:90px;">
+        <div class="panel-heading" ><h3 class="panel-title">Inventory</h3></div>
             <div class="panel-body">
                 <form role="form" id="form_transUS2EU">
                     <label class="control-label dis_label" id="dis_inventoryUS">{{ USInv }}</label>
                 </form>
             </div>
-        </div>
+        </div> -->
         <img src="/static/img/demand.jpg" class="img-responsive" style="width:100%;max-width:200px;margin:5px auto 5px auto;">
         <label for="USEU" class="control-label">Input US to EU:</label>
         <input type="text" class="form-control" id="USEU" name="USEU" placeholder="Transport of US to EU" form="inputform" required autofocus>
     </div>
 
-    <div class="col-sm-2">
+ <!--    <div class="col-sm-2">
         <div class="panel panel-primary" style="max-height:90px;">
             <div class="panel-heading">
                 <h3 class="panel-title">Sale of US</h3>
@@ -195,7 +219,7 @@
                 <label class="dis_label" id="dis_saleUS">{{ SalesUS }}</label>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <div class="row">
@@ -309,19 +333,44 @@
     </div>'
 
     <div class="col-sm-2">
-        <div class="panel panel-primary" style="max-height:90px;">
+      <!--   <div class="panel panel-primary" style="max-height:90px;">
             <div class="panel-heading"><h3 class="panel-title">Tranship Inventory</h3></div>
             <div class="panel-body">
                 <label class="control-label dis_label" id="dis_inventoryEU">{{ EUInv }}</label>
             </div>
+        </div> -->
+         <div class="paneltuple">
+            <table style="width:100%;height:100%">
+                <tr>
+                <td class="upper-label-left">
+                 Sales
+                </td>
+                <td class="upper-label-right">
+                Demand
+                </td>
+                </tr>
+                 <tr>
+                <td class="field-multi-left">
+                   <label class="dis_label" id="dis_saleEU">{{ SalesEU }}</label>
+                </td>
+                <td class="field-multi-right">
+                  <label class="control-label dis_label" id="dis_inventoryEU">{{ EUInv }}</label>
+                </td>
+                </tr>
+            </table>
+            
+            
         </div>
+
+
+
         <img src="/static/img/demand.jpg" class="img-responsive" style="width:100%;max-width:200px;margin:5px auto 5px auto;">
         <label for="EUUS" class="control-label">Input EU to US:</label>
         <input type="text" class="form-control" id="EUUS" name="EUUS" placeholder="Transport of EU to US" form="inputform" required autofocus>
     </div>
 
 
-    <div class="col-sm-2">
+   <!--  <div class="col-sm-2">
         <div class="panel panel-primary" style="max-height:90px;">
             <div class="panel-heading"><h3 class="panel-title">Sale of EU</h3></div>
             <div class="panel-body">
@@ -329,7 +378,7 @@
             </div>
         </div>
     </div>
-
+ -->
 </div>
 
 <div class="row">
@@ -381,7 +430,7 @@
             <input type="hidden" name="now" value="{{ now }}"/>
             <div class="form-group">
                 <div class="col-sm-3 col-sm-offset-2" style="float:right">
-                    <input type="submit" class="btn btn-block btn-info btn-lg run-cus" style="float:right;" value="RUN">
+                    <input type="submit" class="btn btn-block btn-info btn-lg run-cus" style="float:right;margin-right:20px" value="RUN">
                 </div>
             </div>
         </form>

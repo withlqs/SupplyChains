@@ -39,7 +39,7 @@
 <body>
 
 <!--navigation bar-->
-<div class="navbar">
+<div class="customizednavbar">
 <ul style="list-style-type:none;">
     {% if user.is_authenticated %}
     <li style="display:inline;"> Welcome {{ user.username }} {{ user.last_login }} is yours!</li>
@@ -283,7 +283,7 @@
                 <input type="hidden" name="now" value="{{ now }}"/>
 
                 <div class="form-group">
-                    <div class="col-sm-3 col-sm-offset-2" style="float:right;">
+                    <div class="col-sm-3 col-sm-offset-2" style="float:right;margin-right:20px">
                         <input type="submit" class="btn btn-block btn-info btn-lg run-cus" value="RUN">
                     </div>
                 </div>
@@ -353,9 +353,9 @@
     </div>
 </div>
 
-<!-- {% for node in ProfitData %}
+{% for node in ProfitData %}
     <label hidden id="Profit{{ node.id }}">{{ node.profit }}</label>
-{% endfor %} -->
+{% endfor %}
 
 
 <script type="text/javascript">

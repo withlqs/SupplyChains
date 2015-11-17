@@ -228,7 +228,7 @@ def getProfit(username, period):
 def ClearUserData(username):
     models.Para.objects.filter(Username=username).delete()
 
-
+#### Customize Function: Get all
 def getallusers():
     # perm = Permission.objects.get(codename='blogger')
     # users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm) ).distinct()
@@ -242,6 +242,8 @@ def getallgraphs():
     graphs=models.UserGraphUtil.objects.all()
     return graphs
 
+
+#### Customize Function: Monitoring Activities
 def createUserActivity(username, activitydatetime):
     models.UserUtil(Username=username, last_activity=activitydatetime).save()
 
@@ -257,6 +259,9 @@ def setUserActivity(username, activitydatetime):
         createUserActivity(username,timezone.now())
     # models.UserUtil(Username=username, last_activity=activitydatetime).save()
 
+
+
+#### Customize Function: Monitoring Graphs
 def createProfitGraphVals(username,mode,vals):
     models.UserGraphUtil(Username=username,graph_mode=mode,profit_vals=vals).save()
 

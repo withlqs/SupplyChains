@@ -58,7 +58,9 @@ class UserUtil(models.Model):
 class UserGraphUtil(models.Model):
     Username=models.CharField(null=False,max_length=30)
     graph_mode=models.IntegerField()
-    profit_vals=models.DecimalField(max_digits=15, decimal_places=4,null=True)
+    profit_vals=models.CharField(null=True,max_length=255)
+    # profit_vals=models.DecimalField(max_digits=15, decimal_places=4,null=True)
+
     class Meta:
         unique_together = ["Username","graph_mode"]
 

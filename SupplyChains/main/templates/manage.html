@@ -15,6 +15,7 @@
     <script src="/static/js/fileinput.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/fileinput_locale_LANG.js"></script>
+    <script src="/static/js/jscharts.js" type="text/javascript"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="/static/js/html5shiv.js"></script>
@@ -152,12 +153,21 @@
 
 <div class="usergraphs">
      {% for i in graphs %}
-        <p>{{ i.Username}} Latest Simulation {{i.graph_mode}} Graph</p>
-                        
+         <!-- <p>{{ i.Username}} Latest Simulation {{i.graph_mode}},{{i.profit_vals}} Graph</p> -->
+         <!-- NEED TO DO HERE!!! -->
+           
+             <div id="{{i.Username}}{{i.graph_mode}}" class="col-sm-4 charts">
+            
+            </div>
     {% endfor %}
-
-  <!--   <div id="profitChart" class="col-sm-4 charts">
-    </div> -->
+      <!--   {% for j in i.profit_vals %}
+                    <p> {{j}}</p>
+                    {%endfor%} -->
+     <!-- {% for i in profit_vals_all %}
+        <p>profit values {{i}}</p>          
+    {% endfor %}
+ -->
+  
 </div>
  <div class="col-sm-12">
     <!-- {% load i18n %} -->
@@ -192,12 +202,17 @@
     {% for i in graphs%}
     var N ={{ i.profit_vals}};
     
-    if (N.length> 2) {
+    if (N.length>=2) {
         // NEED TO DO HERE
-
-        var myChart = new JSChart('profitChart', 'line');
-        myChart.setDataArray(N);
-        myChart.setTitle('Chain 1 Profit');
+        var myData = new Array(N.length);
+        for (var i = 0; i < myData.length; i++) {
+            myData[i] = [i+1, parseFloat(N[i])];
+        }
+     
+        var jschartname=String("{{i.Username}}")+String("{{i.graph_mode}}")
+        var myChart = new JSChart(jschartname, 'line');
+        myChart.setDataArray(myData);
+        myChart.setTitle('{{i.Username}} Simulation {{i.graph_mode}} Graph');
         myChart.setTitleColor('#8E8E8E');
         myChart.setTitleFontSize(11);
         myChart.setLineWidth(3);
@@ -208,6 +223,7 @@
         myChart.setAxisValuesColor('#95A605');
         myChart.setSize(616, 321);
         myChart.draw();
+        
     }
     {% endfor %}
 </script>

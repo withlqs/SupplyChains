@@ -16,28 +16,55 @@
 </head>
 <body>
 <!--Click one Button to Choose one Chain-->
+<div class="customizednavbar">
+<ul style="list-style-type:none;">
+    <li style="display:inline;"> Welcome {{ username }}!</li>
+     
+    <li style="display:inline;float:right;">
+       
+        <div class="navbtn"><a href="/accounts/logout/" class="btn btn-info" role="button">Log Out</a><div>
+    </li>
+    {% if admin %}
+    <li style="display:inline;float:right;">
+              <div class="navbtn">  <a href="/manage/" target="_blank" class="btn btn-info" role="button">Manage</a>
+               </div>
+    </li> 
+        {% endif %}
+</ul>
+</div>
+
 <div class="container">
-    <div class="row">
-        <div class="col-sm-4 col-sm-offset-8">
-            <div class="col-sm-6">
-                <a href="/accounts/logout/" class="btn btn-info" role="button">Log Out</a>
-            </div>
-        </div>
-    </div>
+   
     <div class="chooseHead">
-        <h1>Please Choose One Chain to Simulate:</h1>
+        <h2>Choose Supply Chain Simulation Type</h2>
 
         <div class="row chooseButtons">
-            <a href="/simulate/" target="_blank" class="btn btn-primary btn-cus" role="button">Chain 1</a>
-        </div>
-        <div class="row chooseButtons">
-            <a href="/simulate2/" target="_blank" class="btn btn-primary btn-cus" role="button">Chain 2</a>
-        </div>
-        {% if admin %}
-            <div class="row chooseButtons">
-                <a href="/manage/" target="_blank" class="btn btn-primary btn-cus" role="button">Manage</a>
+            <div class="upper">
+            <a  href="/simulate/" target="_blank">
+                <img src="/static/img/sea9.png" alt="supply chain 1">
+            </a>
             </div>
-        {% endif %}
+            <div class="lower">
+            <a href="/simulate/" target="_blank">
+               <p class="helptext" style="font-weight:bold"> Supply Chain I </p>
+               <p class="helptext"> The inventory is split to US and EU </p>
+            </a>
+            </div>
+        </div>
+       <div class="row chooseButtons">
+            <div class="upper">
+            <a  href="/simulate2/" target="_blank">
+                <img src="/static/img/ship6.png" alt="supply chain 2">
+            </a>
+            </div>
+            <div class="lower">
+            <a href="/simulate2/" target="_blank">
+                <p class="helptext" style="font-weight:bold">Supply Chain II</p>
+                <p class="helptext">  Completely separated US and EU markets</p>
+            </a>
+            </div>
+        </div>
+        
     </div>
 </div>
 

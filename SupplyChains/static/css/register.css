@@ -1,19 +1,50 @@
 body {
     padding-top: 40px;
     padding-bottom: 40px;
-    background-color: #eee;
+    background-color:#1abc9c;
+    color:#555;
+}
+.container{
+  max-width: 500px;
+  padding: 15px;
+  margin: 0 auto;
+  background-color: #edeff1;
+  border-radius: 6px;
 }
 
+label{
+  padding-left: 5px;
+}
+
+.form-horizontal{
+  font-size:20px;
+}
+
+#id_username,#id_password1,#id_password2{
+  border: 2px solid #edeff1;
+  border-radius: 6px;
+  height:52px;
+  width:100%;
+}
+
+.helptext{
+  font-size:13px;
+  padding-left:5px;
+}
 .form-register-heading {
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 .form-control {
+    max-width: 400px;
     position: relative;
     height: auto;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 10px;
-    font-size: 15px;
+   
+  
+}
+.form-group{
+  padding:15px;
 }
